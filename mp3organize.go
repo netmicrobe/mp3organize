@@ -66,7 +66,7 @@ func IsDirectory(path string) (bool, error) {
 }
 
 func RenameFile(path string, newname string) {
-  reg, err := regexp.Compile("[\\/\\*:\\|\"<>]+")
+  reg, err := regexp.Compile("[\\/\\*:\\|\"<> &\\(\\)]+")
   if err != nil {
       log.Fatal(err)
   }
