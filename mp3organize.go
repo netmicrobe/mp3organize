@@ -2,7 +2,7 @@ package main
 
 import (
   "fmt"
-//  "log"
+  "log"
   "flag"
   "os"
   "path/filepath"
@@ -41,7 +41,7 @@ func main() {
           fmt.Println(path, info.Size())
           r, err := regexp.MatchString(".mp3", info.Name())
           if err == nil && r {
-            renamemp3(path)
+            Renamemp3(path)
           }
         }
         return nil
@@ -52,7 +52,7 @@ func main() {
   } else {
     // do file stuff
     fmt.Println("file : ", target)
-    renamemp3(target)
+    Renamemp3(target)
   }
 
 }
@@ -65,7 +65,23 @@ func IsDirectory(path string) (bool, error) {
   return fileInfo.IsDir(), err
 }
 
-func renamemp3(mp3fi string) {
+func RenameFile(path string, newname string) {
+  reg, err := regexp.Compile("[\\/\\*:\\|\"<>]+")
+  if err != nil {
+      log.Fatal(err)
+  }
+  newname = reg.ReplaceAllString(newname, "_")
+
+  newpath := filepath.Dir(path) + string(os.PathSeparator) + newname
+  fmt.Println("newpath = " , newpath)
+  
+  err = os.Rename(path, newpath)
+  if err != nil {
+    log.Fatal(err)
+  }
+}
+
+func GetMp3NewFilename(mp3fi string) string {
   tag, err := id3v2.Open(mp3fi, id3v2.Options{Parse: true})
   if err != nil {
      fmt.Println("Error while opening mp3 file: ", err)
@@ -74,6 +90,14 @@ func renamemp3(mp3fi string) {
 
   // Read frames.
   fmt.Println("    TRY TO RENAME : ", tag.Artist(), "-", tag.Title())
+  newname := tag.Title() + "-" + tag.Artist() + ".mp3"
+  
+  return newname
+}
+
+func Renamemp3(mp3fi string) {
+  newname := GetMp3NewFilename(mp3fi)
+  RenameFile(mp3fi, newname)
 }
 
 
