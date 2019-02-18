@@ -28,13 +28,17 @@ var cfgFile string
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "mp3organize",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
+	Short: "管理电脑上mp3文件的命令行工具",
+	Long: `管理电脑上mp3文件的命令行工具。
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+查看mp3文件的id3v2信息：
+mp3organize info your-music-folder/a-mp3-file
+
+整理mp3文件，目前支持，
+    * 根据id3v2信息重命名mp3文件：歌名-演唱人.mp3
+    * **注意** 谨慎操作，会重命名目录（包含子目录）下所有mp3文件名。
+mp3organize orga your-music-folder/a-mp3-file
+`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	//	Run: func(cmd *cobra.Command, args []string) { },
